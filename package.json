@@ -1,0 +1,16 @@
+{
+    "name": "@reclaimprotocol/builder-example",
+    "workspaces": [
+        "packages/backend",
+        "packages/frontend"
+    ],
+    "devDependencies": {
+        "concurrently": "^10.0.6"
+    },
+    "private": true,
+    "scripts": {
+        "dev": "concurrently -k -n api,web -c blue,magenta \"npm run dev -w packages/backend\" \"npm run dev -w packages/frontend\"",
+        "build": "npm run build -w packages/frontend",
+        "typecheck": "npm run typecheck -w packages/backend && tsc --noEmit -p packages/frontend"
+    }
+}

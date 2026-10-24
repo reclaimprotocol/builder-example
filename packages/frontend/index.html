@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verification demo</title>
+  </head>
+  <body>
+    <header class="container hstack justify-between">
+      <h3>Verification demo</h3>
+      <div class="hstack">
+        <label for="theme">Theme</label>
+        <select id="theme">
+          <option value="system">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </div>
+    </header>
+
+    <main class="container vstack">
+      <div class="row">
+        <section class="col-5">
+          <form id="start" class="card vstack">
+            <header>
+              <h4>Start a verification</h4>
+              <p class="text-light">Choose what to verify. You finish the verification in a new tab.</p>
+            </header>
+
+            <div data-field>
+              <label for="provider">Provider</label>
+              <select id="provider" name="providerId" required>
+                <option value="">Loading…</option>
+              </select>
+            </div>
+
+            <footer>
+              <button id="submit" type="submit" class="w-100">Start verification</button>
+            </footer>
+          </form>
+        </section>
+
+        <section class="col-7">
+          <article id="status" class="card"></article>
+          <p id="announcer" class="sr-only" role="status"></p>
+        </section>
+      </div>
+
+      <article class="card">
+        <header><h4>Recent</h4></header>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Provider</th><th>Status</th><th>Started</th></tr>
+            </thead>
+            <tbody id="history">
+              <tr><td colspan="3" class="text-light">No verifications yet. Start one to see it here.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
