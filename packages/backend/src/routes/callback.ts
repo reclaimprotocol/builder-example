@@ -7,10 +7,18 @@ export const callbackRoutes: FastifyPluginAsync = async (app) => {
   app.post<{ Body: DeliveryEnvelope }>('/reclaim/callback', async (req, reply) => {
     // The expected session comes from the store, so a forged envelope can't pick its own session.
     const v = req.body?.sessionId && store.get(req.body.sessionId);
-    if (!v) return reply.send();
+    if (!v) {
+      // The store is in memory, so a backend restart drops sessions in progress. Acknowledge, so delivery isn't held.
+      req.log.warn({ sessionId: req.body?.sessionId }, 'Callback for an unknown session');
+      return reply.send();
+    }
 
     try {
-      const delivery = await reclaim.results.receive(req.body as CallbackBody, { reclaimSessionId: v.id });
+      const delivery = await reclaim.results.receive(req.body as CallbackBody, {
+        reclaimSessionId: v.id,
+        // Decrypts results when the organization encrypts them. Plaintext results don't need it.
+        orgEthPrivateKey: process.env.RECLAIM_ORG_ETH_PRIVATE_KEY || undefined,
+      });
       if (delivery.kind === 'result') {
         const { payload, proofs = [] } = delivery.result;
         const { status } = payload.verification_session as { status: store.Verification['status'] };
