@@ -16,7 +16,7 @@ export const callbackRoutes: FastifyPluginAsync = async (app) => {
     try {
       const delivery = await reclaim.results.receive(req.body as CallbackBody, {
         reclaimSessionId: v.id,
-        // Decrypts results when the organization encrypts them. Plaintext results don't need it.
+        // Decrypts encrypted results and verifies TEE-bound proofs. Results that are neither don't need it.
         orgEthPrivateKey: process.env.RECLAIM_ORG_ETH_PRIVATE_KEY || undefined,
       });
       if (delivery.kind === 'result') {

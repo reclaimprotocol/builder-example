@@ -11,11 +11,11 @@ This is the Reclaim example app: a Fastify backend (`packages/backend`) that cre
 
 ## Rules
 
-- Never print, log, or commit `packages/backend/.env`. It holds `RECLAIM_ORG_SECRET` and, when set, `RECLAIM_ORG_ETH_PRIVATE_KEY`. Use the Reclaim MCP tools (`issue_org_token`, `issue_org_keypair`) to write them.
+- Never print, log, or commit `packages/backend/.env` or `packages/backend/.env.backup`. They hold `RECLAIM_ORG_SECRET` and, when set, `RECLAIM_ORG_ETH_PRIVATE_KEY`. Use the Reclaim MCP tools (`issue_org_token`, `issue_org_keypair`) to write them.
 - Providers come from `packages/backend/config.json`. The backend reads it at startup, so restart the backend after you edit it.
 - The store is in memory. A restart drops verifications in progress, so start a new verification after any restart instead of retrying the old one.
 - The callback (`src/routes/callback.ts`) must verify every result with `reclaim.results.receive` before it stores anything. Respond 503 only when `ResultVerificationError.retryable` is true; respond 2xx for everything else, including results that failed verification, so Builder doesn't retry what a retry can't fix.
-- When the organization encrypts results (`get_org_keypair` shows `canEncryptResult: true`), `RECLAIM_ORG_ETH_PRIVATE_KEY` must hold the matching private key, or the callback can't decrypt results.
+- When the organization has a key pair (`get_org_keypair`), set `RECLAIM_ORG_ETH_PRIVATE_KEY` to its private key. The callback uses it to decrypt encrypted results (`canEncryptResult: true`) and to verify TEE-bound proofs. To turn encryption on or off, use `update_org_keypair`; to rotate the key, use `issue_org_keypair` with `replace: true`, which backs up the old key to `packages/backend/.env.backup`.
 - For local callbacks, forward events with the Reclaim MCP `proxy_callback_events` tool, using the backend's port and the path `/reclaim/callback`. A deployed app needs a callback subscription for its public URL instead.
 
 ## Code style
