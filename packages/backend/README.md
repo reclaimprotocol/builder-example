@@ -1,12 +1,12 @@
 # Backend
 
-A Fastify (v5) API that creates Reclaim verification sessions and receives their results. It keeps state in memory and runs TypeScript directly with `tsx`.
+A Fastify (v5) API that creates Reclaim verification sessions and receives their results. It keeps state in memory and runs TypeScript directly with `tsx`. Restarting the server drops verifications in progress, so start a new one after a restart.
 
 For endpoints, status codes, and object shapes, see the [API reference](../../README.md#api-reference) in the root README.
 
 ## Before you begin
 
-1. Copy `example.env` to `.env` and set `RECLAIM_ORG_SECRET` to your organization key. The server doesn't start without it.
+1. Copy `example.env` to `.env` and set `RECLAIM_ORG_SECRET` to your organization key. The server doesn't start without it. If your organization has a key pair, also set `RECLAIM_ORG_ETH_PRIVATE_KEY`. The callback uses it to decrypt encrypted results and to verify TEE-bound proofs.
 2. Set up callback delivery. Builder creates sessions only when your organization has a callback subscription.
    - For local development, forward Builder callbacks to `http://localhost:3000/reclaim/callback` with the Reclaim MCP `proxy_callback_events` tool.
    - In production, register a callback subscription for your public `/reclaim/callback` URL. Subscribe to all five session-ending events: `verification_success`, `verification_rejected`, `verification_error`, `verification_cancelled`, and `session_expired`.
