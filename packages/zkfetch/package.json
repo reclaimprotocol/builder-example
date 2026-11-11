@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@reclaimprotocol/client": "^0.1.46",
+    "@reclaimprotocol/client": "^0.1.47",
     "@reclaimprotocol/zk-fetch": "^2.0.0"
   },
   "devDependencies": {

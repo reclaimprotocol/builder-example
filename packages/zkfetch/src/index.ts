@@ -5,8 +5,6 @@ import { ReclaimClient } from '@reclaimprotocol/zk-fetch';
 
 const TARGET_URL = 'https://example.org/';
 const TITLE_REGEX = '<title>(?<title>[^<]*)</title>';
-// Builder publishes the attestors it trusts here, as `x-reclaim-attestors`.
-const JWKS_URL = 'https://build.reclaimprotocol.org/.well-known/jwks.json';
 
 const orgToken = process.env.RECLAIM_ORG_SECRET?.trim();
 if (!orgToken) throw new Error('RECLAIM_ORG_SECRET is not set. Add it to packages/zkfetch/.env.');
@@ -38,10 +36,8 @@ const hashes = hashProofClaimParams({
   responseRedactions: [{ regex: TITLE_REGEX }],
 });
 
-const result = await verifyRequestProof(proof, {
-  hashes: [{ value: hashes }],
-  attestorJwksUrl: JWKS_URL,
-});
+// Trusts the attestors that Builder publishes in its JWKS.
+const result = await verifyRequestProof(proof, { hashes: [{ value: hashes }] });
 if (!result.valid) {
   console.error('Proof not verified:', result.reason);
   process.exit(1);

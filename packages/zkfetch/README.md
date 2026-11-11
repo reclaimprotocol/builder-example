@@ -21,6 +21,6 @@ The script prints the time the proof took and the verified title. A proof takes 
 
 1. `new ReclaimClient({ orgToken })` creates a Builder-mode client. Before each call, the client asks Builder for an attestor authorization.
 2. `client.zkFetch(url, options, secretOptions)` fetches the URL through a Reclaim attestor and returns an attestor-signed proof of the response. `responseMatches` is what the response must contain, and `responseRedactions` is the part that the proof reveals. Put API keys and cookies in `secretOptions`, never in `options`. They aren't revealed.
-3. `hashProofClaimParams` hashes the request that you expect. `verifyRequestProof` checks the attestor signatures against the attestors in Builder's JWKS, and checks that the proof matches the hash. `result.data[0].extractedParameters` holds the named regex groups.
+3. `hashProofClaimParams` hashes the request that you expect. `verifyRequestProof` checks the attestor signatures against the attestors that Builder publishes in its JWKS, and checks that the proof matches the hash. `result.data[0].extractedParameters` holds the named regex groups.
 
 To verify a proof somewhere else, such as on another server, send the proof there and run step 3 with the same URL, method, matches, and redactions.
