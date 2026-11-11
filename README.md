@@ -35,9 +35,14 @@ The backend listens on port 3000. To use a different port, set the `PORT` enviro
 packages/
   backend/    Fastify API, in-memory store, and Reclaim client
   frontend/   Vite and Oat UI
+  zkfetch/    zkFetch script that proves and verifies a server-side fetch
 ```
 
 The frontend runs at <http://localhost:5173> and proxies `/api` requests to port 3000. For backend details, see [`packages/backend/README.md`](packages/backend/README.md).
+
+## Prove a server-side fetch with zkFetch
+
+`packages/zkfetch` proves a response that your own server fetches, with no user involved, and verifies the proof. Copy `packages/zkfetch/example.env` to `packages/zkfetch/.env`, set `RECLAIM_ORG_SECRET`, and run `npm run zkfetch`. For details, see the [zkFetch README](packages/zkfetch/README.md).
 
 ## Configuration
 

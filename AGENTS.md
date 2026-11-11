@@ -1,6 +1,6 @@
 # Working in this repository
 
-This is the Reclaim example app: a Fastify backend (`packages/backend`) that creates verification sessions and receives results, and a Vite frontend (`packages/frontend`) that starts verifications and shows the outcome. Read the [root README](README.md) for the API and the [backend README](packages/backend/README.md) for setup.
+This is the Reclaim example app: a Fastify backend (`packages/backend`) that creates verification sessions and receives results, a Vite frontend (`packages/frontend`) that starts verifications and shows the outcome, and a zkFetch script (`packages/zkfetch`) that proves and verifies a server-side fetch. Read the [root README](README.md) for the API and the [backend README](packages/backend/README.md) for setup.
 
 ## Run it
 
@@ -8,10 +8,11 @@ This is the Reclaim example app: a Fastify backend (`packages/backend`) that cre
 - If the backend isn't on port 3000, start with `API_URL=http://localhost:<port> npm run dev` so the frontend's `/api` proxy reaches it.
 - Run the dev server in the background with its output in a log file, for example `npm run dev > reclaim-dev.log 2>&1`. Read that file when a callback fails.
 - Run `npm run typecheck` after every change.
+- Run `npm run zkfetch` for the zkFetch script. Each run draws one unit from the organization's `ZKFETCH` quota.
 
 ## Rules
 
-- Never print, log, or commit `packages/backend/.env` or `packages/backend/.env.backup`. They hold `RECLAIM_ORG_SECRET` and, when set, `RECLAIM_ORG_ETH_PRIVATE_KEY`. Use the Reclaim MCP tools (`issue_org_token`, `issue_org_keypair`) to write them.
+- Never print, log, or commit `packages/zkfetch/.env`, `packages/backend/.env` or `packages/backend/.env.backup`. They hold `RECLAIM_ORG_SECRET` and, when set, `RECLAIM_ORG_ETH_PRIVATE_KEY`. Use the Reclaim MCP tools (`issue_org_token`, `issue_org_keypair`) to write them.
 - Providers come from `packages/backend/config.json`. The backend reads it at startup, so restart the backend after you edit it.
 - The store is in memory. A restart drops verifications in progress, so start a new verification after any restart instead of retrying the old one.
 - The callback (`src/routes/callback.ts`) must verify every result with `reclaim.results.receive` before it stores anything. Respond 503 only when `ResultVerificationError.retryable` is true; respond 2xx for everything else, including results that failed verification, so Builder doesn't retry what a retry can't fix.
