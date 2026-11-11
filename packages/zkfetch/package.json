@@ -1,0 +1,21 @@
+{
+  "name": "@reclaimprotocol/builder-example-zkfetch",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "scripts": {
+    "start": "tsx --env-file=.env src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@reclaimprotocol/client": "^0.1.46",
+    "@reclaimprotocol/zk-fetch": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
